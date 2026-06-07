@@ -1,4 +1,4 @@
-package com.routineroom.entities;
+package com.routineroom.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

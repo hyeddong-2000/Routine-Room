@@ -1,7 +1,7 @@
-package com.routineroom.mappers;
+package com.routineroom.mapper;
 
-import com.routineroom.dtos.TaskResponseDTO;
-import com.routineroom.entities.TaskEntity;
+import com.routineroom.dto.TaskResponseDTO;
+import com.routineroom.entity.TaskEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

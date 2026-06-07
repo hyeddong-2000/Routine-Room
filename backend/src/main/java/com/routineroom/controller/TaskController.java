@@ -1,9 +1,9 @@
-package com.routineroom.controllers;
+package com.routineroom.controller;
 
-import com.routineroom.common.ResponseWrapper;
-import com.routineroom.dtos.TaskRequestDTO;
-import com.routineroom.dtos.TaskResponseDTO;
-import com.routineroom.services.TaskService;
+import com.routineroom.common.common.ResponseWrapper;
+import com.routineroom.dto.TaskRequestDTO;
+import com.routineroom.dto.TaskResponseDTO;
+import com.routineroom.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

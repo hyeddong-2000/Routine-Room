@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.routineroom.mappers.TaskMapper">
+
+    <resultMap id="TaskEntityResultMap" type="com.routineroom.entities.TaskEntity">
+        <id     property="taskId"       column="task_id"/>
+        <result property="routineId"    column="routine_id"/>
+        <result property="title"        column="title"/>
+        <result property="content"      column="content"/>
+        <result property="statusCd"     column="status_cd"/>
+        <result property="priorityCd"   column="priority_cd"/>
+        <result property="dueDt"        column="due_dt"/>
+        <result property="assigneeId"   column="assignee_id"/>
+        <result property="orderSeq"     column="order_seq"/>
+        <result property="rgtr"         column="rgtr"/>
+        <result property="regDt"        column="reg_dt"/>
+        <result property="lastMdfr"     column="last_mdfr"/>
+        <result property="lastMdfcnDt"  column="last_mdfcn_dt"/>
+    </resultMap>
+
+    <resultMap id="TaskSummaryResultMap" type="com.routineroom.dtos.TaskResponseDTO$Summary">
+        <result property="taskId"       column="task_id"/>
+        <result property="title"        column="title"/>
+        <result property="statusCd"     column="status_cd"/>
+        <result property="statusNm"     column="status_nm"/>
+        <result property="priorityCd"   column="priority_cd"/>
+        <result property="priorityNm"   column="priority_nm"/>
+        <result property="dueDt"        column="due_dt"/>
+        <result property="assigneeId"   column="assignee_id"/>
+        <result property="assigneeNm"   column="assignee_nm"/>
+        <result property="orderSeq"     column="order_seq"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="Long" resultMap="TaskEntityResultMap">
+        SELECT
+            t.task_id,
+            t.routine_id,
+            t.title,
+            t.content,
+            t.status_cd,
+            t.priority_cd,
+            t.due_dt,
+            t.assignee_id,
+            t.order_seq,
+            t.rgtr,
+            t.reg_dt,
+            t.last_mdfr,
+            t.last_mdfcn_dt
+        FROM TASK t
+        WHERE t.task_id = #{taskId}
+    </select>
+
+    <select id="selectListByRoutineId" parameterType="Long" resultMap="TaskSummaryResultMap">
+        SELECT
+            t.task_id,
+            t.title,
+            t.status_cd,
+            t.priority_cd,
+            t.due_dt,
+            t.assignee_id,
+            u.user_nm  AS assignee_nm,
+            t.order_seq
+        FROM TASK t
+        INNER JOIN USER u ON t.assignee_id = u.user_id
+        WHERE t.routine_id = #{routineId}
+        ORDER BY t.order_seq ASC
+    </select>
+
+    <select id="selectListByUserId" parameterType="Long" resultMap="TaskSummaryResultMap">
+        SELECT
+            t.task_id,
+            t.title,
+            t.status_cd,
+            t.priority_cd,
+            t.due_dt,
+            t.assignee_id,
+            u.user_nm  AS assignee_nm,
+            t.order_seq
+        FROM TASK t
+        INNER JOIN USER u ON t.assignee_id = u.user_id
+        WHERE t.assignee_id = #{userId}
+        ORDER BY t.due_dt ASC, t.order_seq ASC
+    </select>
+
+    <select id="selectCountByRoutineId" parameterType="Long" resultType="int">
+        SELECT COUNT(task_id)
+        FROM TASK
+        WHERE routine_id = #{routineId}
+    </select>
+
+    <insert id="insert" parameterType="com.routineroom.entities.TaskEntity"
+            useGeneratedKeys="true" keyProperty="taskId">
+        INSERT INTO TASK (
+            routine_id,
+            title,
+            content,
+            status_cd,
+            priority_cd,
+            due_dt,
+            assignee_id,
+            order_seq,
+            rgtr,
+            reg_dt
+        ) VALUES (
+            #{routineId},
+            #{title},
+            #{content},
+            #{statusCd},
+            #{priorityCd},
+            #{dueDt},
+            #{assigneeId},
+            #{orderSeq},
+            #{rgtr},
+            #{regDt}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.routineroom.entities.TaskEntity">
+        UPDATE TASK
+        SET
+            title          = #{title},
+            content        = #{content},
+            priority_cd    = #{priorityCd},
+            due_dt         = #{dueDt},
+            assignee_id    = #{assigneeId},
+            last_mdfr      = #{lastMdfr},
+            last_mdfcn_dt  = #{lastMdfcnDt}
+        WHERE task_id = #{taskId}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE TASK
+        SET
+            status_cd      = #{statusCd},
+            last_mdfr      = #{lastMdfr},
+            last_mdfcn_dt  = #{lastMdfcnDt}
+        WHERE task_id = #{taskId}
+    </update>
+
+    <update id="updateOrderSeq">
+        UPDATE TASK
+        SET order_seq = #{orderSeq}
+        WHERE task_id = #{taskId}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM TASK
+        WHERE task_id = #{taskId}
+    </delete>
+
+</mapper>

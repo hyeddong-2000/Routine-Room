@@ -1,5 +1,6 @@
-package com.routineroom.entity;
+package com.routineroom.entity.routine;
 
+import com.routineroom.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

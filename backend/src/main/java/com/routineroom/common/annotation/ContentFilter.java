@@ -8,8 +8,8 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = MultiCheckValidator.class)
-public @interface MultiCheck {
+@Constraint(validatedBy = ContentFilterValidator.class)
+public @interface ContentFilter {
 
     String message() default "입력값에 허용되지 않는 내용이 포함되어 있습니다.";
 

@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.regex.Pattern;
 
-public class MultiCheckValidator implements ConstraintValidator<MultiCheck, String> {
+public class ContentFilterValidator implements ConstraintValidator<ContentFilter, String> {
 
     private static final Pattern RRN_PATTERN =
             Pattern.compile("\\d{6}-[1-4]\\d{6}");

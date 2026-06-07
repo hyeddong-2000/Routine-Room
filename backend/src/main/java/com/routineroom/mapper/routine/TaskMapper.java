@@ -1,7 +1,7 @@
-package com.routineroom.mapper;
+package com.routineroom.mapper.routine;
 
-import com.routineroom.dto.TaskResponseDTO;
-import com.routineroom.entity.TaskEntity;
+import com.routineroom.dto.routine.TaskResponseDTO;
+import com.routineroom.entity.routine.TaskEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,8 +26,7 @@ public interface TaskMapper {
     void updateStatus(
             @Param("taskId") Long taskId,
             @Param("statusCd") String statusCd,
-            @Param("lastMdfr") String lastMdfr,
-            @Param("lastMdfcnDt") LocalDateTime lastMdfcnDt
+            @Param("lastMdfr") String lastMdfr
     );
 
     void updateOrderSeq(@Param("taskId") Long taskId, @Param("orderSeq") int orderSeq);

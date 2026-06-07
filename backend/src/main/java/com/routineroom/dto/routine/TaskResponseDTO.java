@@ -1,4 +1,4 @@
-package com.routineroom.dto;
+package com.routineroom.dto.routine;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

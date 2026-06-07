@@ -1,44 +1,40 @@
 package com.routineroom.common.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ResponseWrapper<T> {
+public class ResponseWrapper {
 
-    private String code;
+    private int code;
     private String message;
-    private T data;
+    private Object data;
 
-    public static <T> ResponseWrapper<T> success(T data) {
-        return ResponseWrapper.<T>builder()
-                .code("SUCCESS")
+    public static ResponseWrapper success(Object data) {
+        return ResponseWrapper.builder()
+                .code(200)
                 .message("정상 처리되었습니다.")
                 .data(data)
                 .build();
     }
 
-    public static <T> ResponseWrapper<T> success() {
-        return ResponseWrapper.<T>builder()
-                .code("SUCCESS")
+    public static ResponseWrapper success() {
+        return ResponseWrapper.builder()
+                .code(200)
                 .message("정상 처리되었습니다.")
                 .build();
     }
 
-    public static <T> ResponseWrapper<T> error(ErrorCode errorCode) {
-        return ResponseWrapper.<T>builder()
+    public static ResponseWrapper error(ErrorCode errorCode) {
+        return ResponseWrapper.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build();
     }
 
-    public static <T> ResponseWrapper<T> error(String code, String message) {
-        return ResponseWrapper.<T>builder()
+    public static ResponseWrapper error(int code, String message) {
+        return ResponseWrapper.builder()
                 .code(code)
                 .message(message)
                 .build();

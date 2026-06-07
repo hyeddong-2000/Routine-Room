@@ -1,16 +1,16 @@
-package com.routineroom.service;
+package com.routineroom.service.routine;
 
 import com.routineroom.common.common.CommonApiException;
 import com.routineroom.common.common.ErrorCode;
-import com.routineroom.dto.TaskRequestDTO;
-import com.routineroom.dto.TaskResponseDTO;
-import com.routineroom.entity.TaskEntity;
-import com.routineroom.mapper.TaskMapper;
+import com.routineroom.common.util.SecurityUtil;
+import com.routineroom.dto.routine.TaskRequestDTO;
+import com.routineroom.dto.routine.TaskResponseDTO;
+import com.routineroom.entity.routine.TaskEntity;
+import com.routineroom.mapper.routine.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,7 +34,8 @@ public class TaskService {
     }
 
     @Transactional
-    public void createTask(TaskRequestDTO.Create request, String userId) {
+    public void createTask(TaskRequestDTO.Create request) {
+        String userId = SecurityUtil.getCurrentUserId();
         int nextOrderSeq = taskMapper.selectCountByRoutineId(request.getRoutineId()) + 1;
         TaskEntity task = TaskEntity.builder()
                 .routineId(request.getRoutineId())
@@ -51,11 +52,12 @@ public class TaskService {
     }
 
     @Transactional
-    public void modifyTask(Long taskId, TaskRequestDTO.Modify request, String userId) {
+    public void modifyTask(Long taskId, TaskRequestDTO.Modify request) {
         TaskEntity existing = taskMapper.selectById(taskId);
         if (existing == null) {
             throw new CommonApiException(ErrorCode.TASK_NOT_FOUND);
         }
+        String userId = SecurityUtil.getCurrentUserId();
         TaskEntity updated = TaskEntity.builder()
                 .taskId(taskId)
                 .routineId(existing.getRoutineId())
@@ -72,11 +74,11 @@ public class TaskService {
     }
 
     @Transactional
-    public void modifyTaskStatus(Long taskId, TaskRequestDTO.StatusChange request, String userId) {
+    public void modifyTaskStatus(Long taskId, TaskRequestDTO.StatusChange request) {
         if (taskMapper.selectById(taskId) == null) {
             throw new CommonApiException(ErrorCode.TASK_NOT_FOUND);
         }
-        taskMapper.updateStatus(taskId, request.getStatusCd(), userId, LocalDateTime.now());
+        taskMapper.updateStatus(taskId, request.getStatusCd(), SecurityUtil.getCurrentUserId());
     }
 
     @Transactional

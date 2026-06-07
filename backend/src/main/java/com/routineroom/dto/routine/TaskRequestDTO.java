@@ -1,4 +1,4 @@
-package com.routineroom.dto;
+package com.routineroom.dto.routine;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

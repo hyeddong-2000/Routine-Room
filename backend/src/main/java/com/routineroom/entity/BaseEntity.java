@@ -3,28 +3,29 @@ package com.routineroom.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class BaseEntity {
 
-    private String rgtr;
-    private LocalDateTime regDt;
-    private String lastMdfr;
-    private LocalDateTime lastMdfcnDt;
+    protected String rgtr;
+    protected LocalDateTime regDt;
+    protected String lastMdfr;
+    protected LocalDateTime lastMdfcnDt;
 
-    public void setFirst(String userId) {
-        this.rgtr = userId;
-        this.regDt = LocalDateTime.now();
+    public void setFirst(String objName) {
+        this.rgtr = objName;
+        this.lastMdfr = objName;
     }
 
-    public void setLast(String userId) {
-        this.lastMdfr = userId;
-        this.lastMdfcnDt = LocalDateTime.now();
+    public void setLast(String objName) {
+        this.lastMdfr = objName;
     }
 }

@@ -12,6 +12,8 @@ public interface UserMapper {
 
     int selectCountById(String id);
 
+    int selectCountByNickname(String nickname);
+
     void insert(UserEntity user);
 
     void update(UserEntity user);

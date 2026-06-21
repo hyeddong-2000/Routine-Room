@@ -16,6 +16,7 @@ public class TaskEntity extends BaseEntity {
 
     private Long taskId;
     private Long routineId;
+    private Integer userNo;
     private String title;
     private String content;
     private String statusCd;

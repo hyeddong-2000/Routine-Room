@@ -5,6 +5,7 @@
     <resultMap id="TaskEntityResultMap" type="com.routineroom.entity.routine.TaskEntity">
         <id     property="taskId"       column="task_id"/>
         <result property="routineId"    column="routine_id"/>
+        <result property="userNo"       column="user_no"/>
         <result property="title"        column="title"/>
         <result property="content"      column="content"/>
         <result property="statusCd"     column="status_cd"/>
@@ -33,118 +34,87 @@
 
     <select id="selectById" parameterType="Long" resultMap="TaskEntityResultMap">
         SELECT
-            t.task_id,
-            t.routine_id,
-            t.title,
-            t.content,
-            t.status_cd,
-            t.priority_cd,
-            t.due_dt,
-            t.assignee_id,
-            t.order_seq,
-            t.rgtr,
-            t.reg_dt,
-            t.last_mdfr,
-            t.last_mdfcn_dt
-        FROM TASK t
+            t.task_id, t.routine_id, t.title, t.content,
+            t.status_cd, t.priority_cd, t.due_dt,
+            t.assignee_id, t.order_seq,
+            t.rgtr, t.reg_dt, t.last_mdfr, t.last_mdfcn_dt
+        FROM task_mng t
         WHERE t.task_id = #{taskId}
     </select>
 
     <select id="selectListByRoutineId" parameterType="Long" resultMap="TaskSummaryResultMap">
         SELECT
-            t.task_id,
-            t.title,
-            t.status_cd,
-            t.priority_cd,
-            t.due_dt,
-            t.assignee_id,
-            u.user_nm  AS assignee_nm,
+            t.task_id, t.title,
+            t.status_cd, t.priority_cd,
+            t.due_dt, t.assignee_id,
+            u.nickname AS assignee_nm,
             t.order_seq
-        FROM TASK t
-        INNER JOIN USER u ON t.assignee_id = u.user_id
+        FROM task_mng t
+        LEFT JOIN user_mng u ON t.assignee_id = u.user_no
         WHERE t.routine_id = #{routineId}
         ORDER BY t.order_seq ASC
     </select>
 
     <select id="selectListByUserId" parameterType="Long" resultMap="TaskSummaryResultMap">
         SELECT
-            t.task_id,
-            t.title,
-            t.status_cd,
-            t.priority_cd,
-            t.due_dt,
-            t.assignee_id,
-            u.user_nm  AS assignee_nm,
+            t.task_id, t.title,
+            t.status_cd, t.priority_cd,
+            t.due_dt, t.assignee_id,
+            u.nickname AS assignee_nm,
             t.order_seq
-        FROM TASK t
-        INNER JOIN USER u ON t.assignee_id = u.user_id
-        WHERE t.assignee_id = #{userId}
+        FROM task_mng t
+        LEFT JOIN user_mng u ON t.assignee_id = u.user_no
+        WHERE t.user_no = #{userId}
         ORDER BY t.due_dt ASC, t.order_seq ASC
     </select>
 
     <select id="selectCountByRoutineId" parameterType="Long" resultType="int">
         SELECT COUNT(task_id)
-        FROM TASK
+        FROM task_mng
         WHERE routine_id = #{routineId}
     </select>
 
     <insert id="insert" parameterType="com.routineroom.entity.routine.TaskEntity"
-            useGeneratedKeys="true" keyProperty="taskId">
-        INSERT INTO TASK (
-            routine_id,
-            title,
-            content,
-            status_cd,
-            priority_cd,
-            due_dt,
-            assignee_id,
-            order_seq,
-            rgtr,
-            reg_dt
+            useGeneratedKeys="true" keyProperty="taskId" keyColumn="task_id">
+        INSERT INTO task_mng (
+            routine_id, user_no, title, content, status_cd, priority_cd,
+            due_dt, assignee_id, order_seq,
+            rgtr, reg_dt, last_mdfr, last_mdfcn_dt
         ) VALUES (
-            #{routineId},
-            #{title},
-            #{content},
-            #{statusCd},
-            #{priorityCd},
-            #{dueDt},
-            #{assigneeId},
-            #{orderSeq},
-            #{rgtr},
-            #{regDt}
+            #{routineId}, #{userNo}, #{title}, #{content}, #{statusCd}, #{priorityCd},
+            #{dueDt}, #{assigneeId}, #{orderSeq},
+            #{rgtr}, NOW(), #{lastMdfr}, NOW()
         )
     </insert>
 
     <update id="update" parameterType="com.routineroom.entity.routine.TaskEntity">
-        UPDATE TASK
-        SET
-            title          = #{title},
-            content        = #{content},
-            priority_cd    = #{priorityCd},
-            due_dt         = #{dueDt},
-            assignee_id    = #{assigneeId},
-            last_mdfr      = #{lastMdfr},
-            last_mdfcn_dt  = #{lastMdfcnDt}
+        UPDATE task_mng
+        SET title         = #{title},
+            content       = #{content},
+            priority_cd   = #{priorityCd},
+            due_dt        = #{dueDt},
+            assignee_id   = #{assigneeId},
+            last_mdfr     = #{lastMdfr},
+            last_mdfcn_dt = NOW()
         WHERE task_id = #{taskId}
     </update>
 
     <update id="updateStatus">
-        UPDATE TASK
-        SET
-            status_cd      = #{statusCd},
-            last_mdfr      = #{lastMdfr},
-            last_mdfcn_dt  = #{lastMdfcnDt}
+        UPDATE task_mng
+        SET status_cd     = #{statusCd},
+            last_mdfr     = #{lastMdfr},
+            last_mdfcn_dt = NOW()
         WHERE task_id = #{taskId}
     </update>
 
     <update id="updateOrderSeq">
-        UPDATE TASK
+        UPDATE task_mng
         SET order_seq = #{orderSeq}
         WHERE task_id = #{taskId}
     </update>
 
     <delete id="deleteById" parameterType="Long">
-        DELETE FROM TASK
+        DELETE FROM task_mng
         WHERE task_id = #{taskId}
     </delete>
 

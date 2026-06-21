@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.routineroom.mapper.user.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.routineroom.entity.user.UserEntity">
+        <id     property="userNo"        column="user_no"/>
+        <result property="id"            column="id"/>
+        <result property="password"      column="password"/>
+        <result property="nickname"      column="nickname"/>
+        <result property="authority"     column="authority"/>
+        <result property="bgmFileId"     column="bgm_file_id"/>
+        <result property="bgmUseYn"      column="bgm_use_yn"/>
+        <result property="profileFileId" column="profile_file_id"/>
+        <result property="todayCnt"      column="today_cnt"/>
+        <result property="totalCnt"      column="total_cnt"/>
+        <result property="clientIp"      column="client_ip"/>
+        <result property="rgtr"          column="rgtr"/>
+        <result property="regDt"         column="reg_dt"/>
+        <result property="lastMdfr"      column="last_mdfr"/>
+        <result property="lastMdfcnDt"   column="last_mdfcn_dt"/>
+    </resultMap>
+
+    <sql id="selectColumns">
+        user_no, id, password, nickname, authority,
+        bgm_file_id, bgm_use_yn, profile_file_id,
+        today_cnt, total_cnt, client_ip,
+        rgtr, reg_dt, last_mdfr, last_mdfcn_dt
+    </sql>
+
+    <select id="selectById" resultMap="UserResultMap">
+        SELECT <include refid="selectColumns"/>
+        FROM user_mng
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserNo" resultMap="UserResultMap">
+        SELECT <include refid="selectColumns"/>
+        FROM user_mng
+        WHERE user_no = #{userNo}
+    </select>
+
+    <select id="selectCountById" resultType="int">
+        SELECT COUNT(*) FROM user_mng WHERE id = #{id}
+    </select>
+
+    <select id="selectCountByNickname" resultType="int">
+        SELECT COUNT(*) FROM user_mng WHERE nickname = #{nickname}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userNo" keyColumn="user_no">
+        INSERT INTO user_mng (
+            id, password, nickname, authority,
+            bgm_use_yn, today_cnt, total_cnt,
+            rgtr, reg_dt, last_mdfr, last_mdfcn_dt
+        ) VALUES (
+            #{id}, #{password}, #{nickname}, #{authority},
+            #{bgmUseYn}, #{todayCnt}, #{totalCnt},
+            #{rgtr}, NOW(), #{lastMdfr}, NOW()
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE user_mng
+        SET nickname      = #{nickname},
+            bgm_use_yn    = #{bgmUseYn},
+            last_mdfr     = #{lastMdfr},
+            last_mdfcn_dt = NOW()
+        WHERE user_no = #{userNo}
+    </update>
+
+    <update id="updateTodayCnt">
+        UPDATE user_mng
+        SET today_cnt = today_cnt + 1,
+            total_cnt = total_cnt + 1
+        WHERE user_no = #{userNo}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM user_mng WHERE user_no = #{userNo}
+    </delete>
+
+</mapper>

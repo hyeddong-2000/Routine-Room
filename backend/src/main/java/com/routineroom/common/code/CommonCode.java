@@ -32,7 +32,8 @@ public class CommonCode {
                 redisIO.setValue(PREFIX + codeCd, codeNm);
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            // Redis나 DB가 없는 환경에서 앱이 뜨지 않는 것을 방지
+            throw new RuntimeException("공통코드 로딩 실패: " + ex.getMessage(), ex);
         }
     }
 

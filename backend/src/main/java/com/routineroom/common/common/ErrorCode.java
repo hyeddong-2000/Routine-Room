@@ -17,7 +17,8 @@ public enum ErrorCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 20004, "만료된 토큰입니다."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, 30001, "사용자를 찾을 수 없습니다."),
-    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, 30002, "이미 존재하는 사용자입니다."),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, 30002, "이미 사용 중인 아이디입니다."),
+    NICKNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, 30004, "이미 사용 중인 닉네임입니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, 30003, "비밀번호가 일치하지 않습니다."),
 
     ROUTINE_NOT_FOUND(HttpStatus.NOT_FOUND, 40001, "루틴을 찾을 수 없습니다."),
